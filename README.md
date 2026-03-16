@@ -15,7 +15,7 @@ AlphaPulse-Investment-Risk-Monitor
 │   └── var_model.py
 │
 ├── dashboard
-│   └── tableau_dashboard.twb
+│   └── Alphapulse-investment-risk-Monitor
 │
 ├── images
 │   └── correlation_heatmap.png
@@ -37,6 +37,3 @@ Open the live dashboard here:
 
 https://public.tableau.com/app/profile/shaik.uzmatania4925/viz/AlphaPulse-investment-Risk-Monitor1/AlphaPulseInvestmentRiskVolatilityMonitor
 
-### Dashboard Preview
-
-![Dashboard]([images/dashboard_preview.png](https://github.com/UzmaTania1/AlphaPulse-Investment-Risk-Monitor/blob/main/images/dashboard_preview.png.png))
