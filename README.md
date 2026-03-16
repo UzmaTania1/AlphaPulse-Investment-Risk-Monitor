@@ -22,3 +22,21 @@ AlphaPulse-Investment-Risk-Monitor
 │
 ├── requirements.txt
 └── README.md
+
+
+A financial analytics dashboard that monitors portfolio risk using:
+
+* Rolling volatility
+* Correlation heatmaps
+* Monte Carlo simulation
+* Value at Risk (VaR)
+
+## Interactive Tableau Dashboard
+
+Open the live dashboard here:
+
+https://public.tableau.com/app/profile/shaik.uzmatania4925/viz/AlphaPulse-investment-Risk-Monitor1/AlphaPulseInvestmentRiskVolatilityMonitor
+
+### Dashboard Preview
+
+![Dashboard](images/dashboard_preview.png)
