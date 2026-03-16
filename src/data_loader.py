@@ -4,7 +4,7 @@ import pandas as pd
 
 def load_stock_data(tickers, start="2020-01-01", end="2025-01-01"):
     
-    data = yf.download(tickers, start=start, end=end)["Adj Close"]
+    data = yf.download(tickers, start=start, end=end)["Close"]
     
     data.to_csv("../data/raw_market_data.csv")
     
