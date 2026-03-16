@@ -39,4 +39,4 @@ https://public.tableau.com/app/profile/shaik.uzmatania4925/viz/AlphaPulse-invest
 
 ### Dashboard Preview
 
-![Dashboard](images/dashboard_preview.png)
+![Dashboard]([images/dashboard_preview.png](https://github.com/UzmaTania1/AlphaPulse-Investment-Risk-Monitor/blob/main/images/dashboard_preview.png.png))
