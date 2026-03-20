@@ -1,217 +1,243 @@
-# 📈 AlphaPulse – Investment Risk & Volatility Monitor
+# 📈 AlphaPulse — Investment Risk & Volatility Monitor
 
-AlphaPulse is a financial analytics project designed to monitor stock market behavior, analyze portfolio risk exposure, and visualize market volatility using Python and Tableau.
+> **Zaalima Development | Data Analytics Division — Project 2: Financial Analytics**
+> Product Brand Name: **AlphaPulse** | Sprint: Q4 2025
 
-The system processes historical stock data, computes financial risk metrics, and presents insights through an interactive dashboard to support better investment decision-making.
+AlphaPulse is an end-to-end financial analytics pipeline that monitors stock market behaviour, quantifies portfolio risk exposure, and delivers executive-grade insights through an interactive Tableau dashboard.
 
-This project demonstrates an end-to-end analytics workflow including data processing, statistical modeling, and business-focused visualization.
-
----
-
-# 🚀 Project Overview
-
-Financial markets are highly volatile, and investment firms must constantly monitor portfolio performance and risk exposure.
-
-AlphaPulse provides a structured analytics pipeline that:
-
-• Analyzes historical stock price movements
-• Calculates volatility and daily return metrics
-• Identifies correlations between financial assets
-• Simulates potential future outcomes using Monte Carlo simulations
-• Visualizes all insights in an interactive Tableau dashboard
-
-The goal is to help analysts understand market risk and improve portfolio diversification strategies.
+The system ingests live market data via `yfinance`, computes industry-standard risk metrics using NumPy, and presents results through a dynamic Tableau dashboard with What-If scenario analysis — enabling portfolio managers to make data-driven investment decisions.
 
 ---
 
-# 🧠 Key Analytics Features
+## 🚀 Project Overview
 
-## 📊 Stock Price Trend Analysis
+Financial markets are highly volatile, and investment firms must constantly monitor portfolio performance and risk exposure. AlphaPulse delivers a structured analytics pipeline that:
 
-Visualizes how stock prices evolve over time for multiple assets.
-This helps identify market trends and long-term performance patterns.
-
----
-
-## 📉 Daily Percentage Returns
-
-Daily return measures the percentage change in stock price compared to the previous day.
-
-This metric is used to evaluate short-term asset performance and forms the foundation for volatility calculations.
+- Fetches historical data for **10 stocks across diverse sectors + S&P 500 benchmark** via `yfinance`
+- Calculates daily log returns, rolling volatility, and cross-asset correlations
+- Runs a **10,000-path Monte Carlo simulation** to forecast 1-year portfolio performance
+- Computes **Value at Risk (VaR) and CVaR** using both Historical and Parametric methods
+- Exports Tableau-ready CSVs and publishes an interactive executive dashboard
 
 ---
 
-## 📊 Rolling Volatility (30-Day)
+## 🧠 Key Analytics Features
 
-Rolling volatility calculates the moving standard deviation of daily returns over a 30-day window.
+### 📊 Stock Price Trend Analysis
+Visualises how stock prices evolve over time for all 11 assets (10 stocks + S&P 500 index). Helps identify long-term performance trends and sector rotation patterns.
 
-It helps detect periods of increased market uncertainty and risk.
+### 📉 Daily Log Returns
+Calculates percentage change in price day-over-day for each asset. Forms the foundation for all downstream volatility and risk calculations.
 
----
+### 📊 Rolling Volatility (30-Day)
+Computes the 30-day moving standard deviation of daily returns — a key indicator of market uncertainty. Periods of elevated rolling volatility signal increased portfolio risk.
 
-## 🔥 Correlation Heatmap
+### 🔥 Correlation Heatmap
+Dynamic matrix showing how all 11 assets move relative to one another. Positive correlation = assets move together. Negative = opposite directions. Used to assess diversification quality.
 
-The correlation matrix shows how different assets move relative to one another.
+### 🎲 Monte Carlo Simulation (10,000 Runs)
+Runs **10,000 stochastic simulations** using a multivariate normal distribution fitted to historical return statistics. Preserves cross-asset correlations via Cholesky decomposition. Forecasts portfolio value 1 year (252 trading days) into the future, producing a probability-based risk profile including best/worst/median outcomes.
 
-• Positive correlation → assets move together
-• Negative correlation → assets move in opposite directions
-• Low correlation → independent movements
+### ⚠️ Value at Risk (VaR) & CVaR
+Calculates VaR at 90%, 95%, and 99% confidence levels using both:
+- **Historical Simulation** — non-parametric, uses actual return distribution
+- **Parametric (Variance-Covariance)** — assumes normality, fast to compute
 
-This analysis helps investors understand diversification opportunities.
-
----
-
-## 🎲 Monte Carlo Simulation
-
-Monte Carlo simulation forecasts potential future price paths by generating thousands of randomized scenarios based on historical return distributions.
-
-This produces a probability-based view of future portfolio performance and helps estimate potential downside risk.
+Also calculates **Conditional VaR (CVaR / Expected Shortfall)** — the average loss beyond the VaR threshold — which is a more conservative and complete risk measure.
 
 ---
 
-# 🏗️ System Architecture
-
-The project follows a simple **ETL (Extract → Transform → Load)** workflow.
-
-### 1️⃣ Extract
-
-Stock market data is collected from financial datasets or retrieved using APIs.
-
----
-
-### 2️⃣ Transform
-
-Python scripts process the raw data and compute key financial indicators such as:
-
-• Daily returns
-• Rolling volatility
-• Correlation matrices
-• Monte Carlo simulations
-
----
-
-### 3️⃣ Load
-
-The processed dataset is exported and connected to a Tableau dashboard for visualization and analysis.
-
----
-
-# 🛠️ Technology Stack
-
-Python – Data processing and financial computations
-
-NumPy – Mathematical operations and simulation models
-
-pandas – Data manipulation and analysis
-
-Matplotlib / Seaborn – Data exploration and plotting
-
-Tableau – Interactive business dashboards
-
-GitHub – Version control and project documentation
-
----
-
-# 📂 Project Structure
+## 🏗️ System Architecture (ETL Pipeline)
 
 ```
-AlphaPulse-Investment-Risk-Monitor
+yfinance API
+     │
+     ▼
+[Extract] data_loader.py
+  • 10 diverse stocks + ^GSPC (S&P 500)
+  • Auto-adjust for stock splits & dividends
+  • Resilient retry logic for API rate limits
+  • Saves → data/raw_market_data.csv
+     │
+     ▼
+[Transform] src/ modules
+  ├── returns_calculator.py  → Daily log returns
+  ├── volatility.py          → 30-day rolling std dev
+  ├── correlation.py         → Correlation matrix & heatmap
+  ├── monte_carlo.py         → 10,000-path simulation
+  └── var_model.py           → VaR, CVaR, risk metrics
+  • Saves → data/processed_market_data.csv
+            data/monte_carlo_results.csv
+            data/var_risk_metrics.csv
+            data/var_risk_metrics_per_asset.csv
+            data/var_risk_metrics_executive_summary.csv
+     │
+     ▼
+[Load] Tableau Dashboard
+  • Connected to processed CSV outputs
+  • Interactive What-If parameters
+  • Executive Summary tab (VaR + Max Drawdown)
+  • Published → Tableau Public
+```
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer | Tool | Purpose |
+|---|---|---|
+| Data Source | `yfinance` | Live market data via API |
+| Processing | `Python 3.10+` | Pipeline orchestration |
+| Computation | `NumPy` | Matrix ops, simulation, VaR math |
+| Manipulation | `Pandas` | DataFrames, cleaning, export |
+| Visualisation (dev) | `Matplotlib / Seaborn` | Exploratory plots |
+| Visualisation (prod) | **Tableau** | Executive dashboard |
+| Version Control | `GitHub` | Code & documentation |
+
+---
+
+## 📂 Project Structure
+
+```
+AlphaPulse-Investment-Risk-Monitor/
 │
-├── data
-│   ├── raw_market_data.csv
-│   └── processed_market_data.csv
+├── data/
+│   ├── raw_market_data.csv                        ← Fetched from yfinance
+│   ├── processed_market_data.csv                  ← Cleaned returns
+│   ├── monte_carlo_results.csv                    ← 10,000 final values
+│   ├── monte_carlo_results_daily_percentiles.csv  ← Daily fan chart data
+│   ├── var_risk_metrics.csv                       ← Portfolio VaR summary
+│   ├── var_risk_metrics_per_asset.csv             ← Per-stock risk breakdown
+│   └── var_risk_metrics_executive_summary.csv     ← KPIs for exec tab
 │
-├── scripts
-│   └── run_pipeline.py
+├── src/
+│   ├── data_loader.py         ← yfinance fetch + error handling
+│   ├── returns_calculator.py  ← Daily log return computation
+│   ├── volatility.py          ← Rolling 30-day volatility
+│   ├── correlation.py         ← Correlation matrix + heatmap export
+│   ├── monte_carlo.py         ← 10,000-run stochastic simulation
+│   └── var_model.py           ← VaR, CVaR, Sharpe, Max Drawdown
 │
-├── dashboard
-│   └── AlphaPulse_Dashboard.twbx
+├── notebooks/
+│   └── AlphaPulse_Analysis.ipynb   ← Full exploratory walkthrough
 │
-├── images
-│   └── dashboard_preview.png
+├── dashboard/
+│   └── AlphaPulse_Dashboard.twbx   ← Tableau packaged workbook
 │
+├── images/
+│   ├── dashboard_preview.png
+│   ├── monte_carlo_distribution.png
+│   ├── var_distribution.png
+│   └── correlation_heatmap.png
+│
+├── main.py              ← Full pipeline runner (all modules)
+├── run_pipeline.py      ← Simplified single-command runner
 ├── requirements.txt
-│
 └── README.md
 ```
 
 ---
 
-# 📊 Tableau Dashboard
+## 📦 Portfolio Composition
 
-The interactive dashboard allows users to explore financial insights visually.
-
-Dashboard components include:
-
-• Stock price trend analysis
-• Daily return visualization
-• Rolling volatility monitoring
-• Correlation heatmap
-• Monte Carlo simulation results
-
----
-
-# 🌐 Live Dashboard
-
-View the interactive dashboard here:
-
-https://public.tableau.com/app/profile/shaik.uzmatania4925/viz/AlphaPulse-investment-Risk-Monitor1/AlphaPulseInvestmentRiskVolatilityMonitor
+| # | Ticker | Company | Sector |
+|---|--------|---------|--------|
+| 1 | AAPL | Apple Inc. | Technology |
+| 2 | MSFT | Microsoft Corp. | Technology |
+| 3 | JPM | JPMorgan Chase | Financials |
+| 4 | JNJ | Johnson & Johnson | Healthcare |
+| 5 | XOM | ExxonMobil | Energy |
+| 6 | AMZN | Amazon.com | Consumer Discretionary |
+| 7 | PG | Procter & Gamble | Consumer Staples |
+| 8 | CAT | Caterpillar Inc. | Industrials |
+| 9 | NEE | NextEra Energy | Utilities |
+| 10 | BHP | BHP Group | Materials |
+| + | ^GSPC | S&P 500 Index | Benchmark |
 
 ---
 
-# 🖼️ Dashboard Preview
+## ⚙️ Installation & Setup
 
-![AlphaPulse Dashboard](images/dashboard_preview.png)
-
----
-
-# ⚙️ Installation & Setup
-
-Clone the repository:
-
-```
+**1. Clone the repository**
+```bash
 git clone https://github.com/UzmaTania1/AlphaPulse-Investment-Risk-Monitor.git
-```
-
-Navigate to the project folder:
-
-```
 cd AlphaPulse-Investment-Risk-Monitor
 ```
 
-Install required dependencies:
-
-```
+**2. Install dependencies**
+```bash
 pip install -r requirements.txt
 ```
 
-Run the data processing pipeline:
-
-```
+**3. Run the full pipeline**
+```bash
 python run_pipeline.py
 ```
 
----
+This will fetch data, compute all metrics, export CSVs to `data/`, and save plots to `images/`.
 
-# 📈 Project Outcomes
+**4. Automate (optional — scheduled refresh)**
 
-This project demonstrates practical skills in:
+On Linux/macOS, add to crontab to run every Sunday night at 11 PM:
+```bash
+crontab -e
+# Add this line:
+0 23 * * 0 /usr/bin/python3 /path/to/AlphaPulse/run_pipeline.py >> /path/to/pipeline.log 2>&1
+```
 
-• Financial data analysis
-• Risk and volatility modeling
-• Python data pipelines
-• Data visualization with Tableau
-• GitHub project documentation and collaboration
-
----
-
-# ⭐ Future Improvements
-
-Potential extensions for this project include:
-
-• Real-time stock data ingestion
-• Portfolio optimization algorithms
-• Value at Risk (VaR) calculations
-• Automated financial reporting dashboards
+On Windows, use Task Scheduler to run `run_pipeline.py` on a weekly trigger.
 
 ---
+
+## 📊 Tableau Dashboard
+
+### Connecting Tableau to the Data
+1. Open Tableau Desktop
+2. Connect to `data/var_risk_metrics.csv` (and other processed CSVs)
+3. Use **Data → Refresh** to update after running the pipeline
+
+### Dashboard Sheets
+
+| Sheet | Data Source | Description |
+|---|---|---|
+| Stock Price Trends | processed_market_data.csv | Price line chart, all 11 assets |
+| Daily Returns | processed_market_data.csv | Return distribution per ticker |
+| Rolling Volatility | processed_market_data.csv | 30-day std dev over time |
+| Correlation Heatmap | processed_market_data.csv | Cross-asset correlation matrix |
+| Monte Carlo Fan Chart | monte_carlo_results_daily_percentiles.csv | P5/P25/P50/P75/P95 bands |
+| Monte Carlo Distribution | monte_carlo_results.csv | Histogram of final portfolio values |
+| VaR Summary | var_risk_metrics.csv | VaR & CVaR by method and confidence level |
+| Per-Asset Risk | var_risk_metrics_per_asset.csv | Individual stock VaR breakdown |
+| **Executive Summary** | var_risk_metrics_executive_summary.csv | **Current VaR, Max Drawdown, Sharpe, Sortino** |
+
+### What-If Parameters (Week 3 Requirement)
+In Tableau, create a **Parameter** named `Sector Shock (%)` (range: -50% to +50%).
+Use a calculated field to adjust returns for the relevant sector tickers and watch VaR and the Monte Carlo chart update dynamically.
+
+---
+
+## 🌐 Live Dashboard
+
+View the interactive Tableau dashboard here:
+[https://public.tableau.com/app/profile/shaik.uzmatania4925/viz/AlphaPulse-investment-Risk-Monitor1/AlphaPulseInvestmentRiskVolatilityMonitor](https://public.tableau.com/app/profile/shaik.uzmatania4925/viz/AlphaPulse-investment-Risk-Monitor1/AlphaPulseInvestmentRiskVolatilityMonitor)
+
+---
+
+## 📈 Project Outcomes
+
+This project demonstrates practical, production-grade skills in:
+- Live financial data ingestion with API resilience
+- Quantitative risk modelling (VaR, CVaR, Monte Carlo, Sharpe, Sortino, Max Drawdown)
+- End-to-end Python data pipelines with automated scheduling
+- Executive-grade Tableau dashboard design with What-If interactivity
+- Clean, modular code with professional GitHub documentation
+
+---
+
+## 🔮 Future Improvements
+
+- Real-time streaming data via WebSocket or Kafka
+- Portfolio optimisation (Efficient Frontier / Markowitz)
+- GARCH model for volatility forecasting
+- Stress testing against historical crisis scenarios (2008, COVID-19)
+- Automated email alert when VaR breaches a set threshold
