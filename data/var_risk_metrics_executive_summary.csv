@@ -1,0 +1,2 @@
+annualised_return,annualised_volatility,sharpe_ratio,sortino_ratio,max_drawdown,max_drawdown_usd,best_day_return,worst_day_return,positive_days_pct,current_var_95_usd,current_cvar_95_usd,portfolio_value
+0.19614,0.28028,0.6998,1.0437,-0.464236,-46423.57,0.139623,-0.061049,53.63,-2913.957777646519,-3923.5084222388937,100000.0
