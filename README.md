@@ -219,7 +219,11 @@ Use a calculated field to adjust returns for the relevant sector tickers and wat
 ## 🌐 Live Dashboard
 
 View the interactive Tableau dashboard here:
-[https://public.tableau.com/app/profile/shaik.uzmatania4925/viz/AlphaPulse-investment-Risk-Monitor1/AlphaPulseInvestmentRiskVolatilityMonitor](https://public.tableau.com/app/profile/shaik.uzmatania4925/viz/AlphaPulse-investment-Risk-Monitor1/AlphaPulseInvestmentRiskVolatilityMonitor)
+**Main Dashboard:**
+https://public.tableau.com/views/AlphaPulse-Investment/AlphaPulseInvestmentRiskMonitor
+
+**Executive Summary:**
+https://public.tableau.com/views/Executivesummary_17740451490360/ExecutiveSummary
 
 ---
 
